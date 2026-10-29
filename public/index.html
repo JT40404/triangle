@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>▲ | Launch a pump.fun coin</title>
+  <meta name="description" content="Name it, draw it, launch it. ▲ creates your pump.fun coin straight from your own Solana wallet.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="▲ | Launch a pump.fun coin">
+  <meta property="og:description" content="Name it, draw it, launch it. ▲ creates your pump.fun coin straight from your own Solana wallet.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=IBM+Plex+Sans+JP:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- Pixel loading screen: the ▲ mascot turns in place while the dots count up -->
+  <div id="loading" aria-hidden="true">
+    <div class="kid">
+      <svg class="kid__frame kid__frame--a" viewBox="0 0 12 12" shape-rendering="crispEdges"><path d="M5 0h2v2H5zM4 2h4v2H4zM3 4h6v2H3zM2 6h8v2H2zM1 8h10v2H1zM0 10h12v1H0zM3 11h2v1H3zM7 11h2v1H7z"/><path class="eye" d="M4 6h1v1H4zM7 6h1v1H7z"/></svg>
+      <svg class="kid__frame kid__frame--b" viewBox="0 0 12 12" shape-rendering="crispEdges"><path d="M5 0h2v2H5zM4 2h4v2H4zM3 4h6v2H3zM2 6h8v2H2zM1 8h10v2H1zM0 10h12v1H0zM2 11h2v1H2zM8 11h2v1H8z"/><path class="eye" d="M5 6h1v1H5zM8 6h1v1H8z"/></svg>
+    </div>
+    <p class="loading__text">Loading<span>.</span><span>.</span><span>.</span></p>
+  </div>
+
+  <header class="top">
+    <a class="logo" href="/" aria-label="▲ home">
+      <svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path d="M5 0h2v2H5zM4 2h4v2H4zM3 4h6v2H3zM2 6h8v2H2zM1 8h10v2H1zM0 10h12v1H0zM3 11h2v1H3zM7 11h2v1H7z"/><path class="eye" d="M4 6h1v1H4zM7 6h1v1H7z"/></svg>
+      <span>▲</span>
+    </a>
+    <button id="connectBtn" class="btn btn--ghost" type="button">Connect wallet</button>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <h1 class="headline">Name it.<br>Draw it.<br>Launch it.</h1>
+      <p class="lede">▲ puts a new coin on pump.fun with one payment from your Solana wallet. Its creator fees are recycled automatically: most of them buy back the coin itself, the rest buy ▲.</p>
+
+      <ol class="steps">
+        <li><b>Connect</b><span>Phantom, Solflare or Backpack.</span></li>
+        <li><b>Describe your coin</b><span>Name, ticker, picture and links.</span></li>
+        <li><b>Approve one payment</b><span>Covers your first buy and launch costs. Anything unused comes back.</span></li>
+        <li><b>Your coin is live</b><span>First-buy tokens land in your wallet. Fees start recycling.</span></li>
+      </ol>
+    </section>
+
+    <section class="panel" aria-labelledby="formTitle">
+      <h2 id="formTitle" class="panel__title">New coin</h2>
+
+      <form id="launchForm" novalidate>
+        <div class="row">
+          <label class="field field--image" for="image">
+            <span class="field__label">Picture</span>
+            <span class="drop" id="drop">
+              <img id="preview" alt="" hidden>
+              <span id="dropHint">Add image<br><small>PNG, JPG, GIF · up to 2.5 MB</small></span>
+            </span>
+            <input id="image" name="image" type="file" accept="image/png,image/jpeg,image/gif,image/webp" class="sr-only">
+          </label>
+          <div class="col">
+            <label class="field">
+              <span class="field__label">Name <em id="nameCount">0/32</em></span>
+              <input id="name" name="name" maxlength="32" required autocomplete="off" placeholder="Little Triangle">
+            </label>
+            <label class="field">
+              <span class="field__label">Ticker <em id="symCount">0/10</em></span>
+              <input id="symbol" name="symbol" maxlength="10" required autocomplete="off" placeholder="TRI">
+            </label>
+          </div>
+        </div>
+
+        <label class="field">
+          <span class="field__label">Description</span>
+          <textarea id="description" name="description" rows="3" maxlength="500" placeholder="What is this coin about?"></textarea>
+        </label>
+
+        <details class="more">
+          <summary>Links (optional)</summary>
+          <label class="field"><span class="field__label">X / Twitter</span><input id="twitter" type="url" placeholder="https://x.com/…"></label>
+          <label class="field"><span class="field__label">Telegram</span><input id="telegram" type="url" placeholder="https://t.me/…"></label>
+          <label class="field"><span class="field__label">Website</span><input id="website" type="url" placeholder="https://…"></label>
+        </details>
+
+        <details class="more">
+          <summary>Launch settings</summary>
+          <label class="field"><span class="field__label">First buy (SOL)</span><input id="amount" type="number" min="0" step="0.01" value="0"></label>
+          <div class="row row--even">
+            <label class="field"><span class="field__label">Slippage %</span><input id="slippage" type="number" min="1" max="50" step="1" value="10"></label>
+            <label class="field"><span class="field__label">Priority fee (SOL)</span><input id="priorityFee" type="number" min="0" step="0.0001" value="0.0005"></label>
+          </div>
+          <p class="note">A first buy lets you hold some of your own coin from the start. 0 skips it.</p>
+        </details>
+
+        <p class="disclose">Creator fees from coins launched here don’t go to you. 90% buys back your coin<span id="burnNote"> and those tokens are burned</span>; 10% buys ▲.</p>
+
+        <button id="launchBtn" class="btn btn--launch" type="submit">Connect wallet to launch</button>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <section class="flow" aria-labelledby="flowTitle">
+    <h2 id="flowTitle" class="flow__title">Where creator fees go</h2>
+    <div class="split" role="img" aria-label="90 percent back into the coin, 10 percent to ▲">
+      <div class="split__self"><b>90%</b><span>buys back the coin that earned it</span></div>
+      <div class="split__main"><b>10%</b><span>buys ▲</span></div>
+    </div>
+    <dl class="tally">
+      <div><dt>Coins launched</dt><dd id="sLaunches">–</dd></div>
+      <div><dt>SOL recycled into launched coins</dt><dd id="sBuyback">–</dd></div>
+      <div><dt>SOL sent to ▲</dt><dd id="sMain">–</dd></div>
+    </dl>
+    <p class="note" id="mainNote"></p>
+  </section>
+
+  <footer class="foot">
+    <p>Each coin’s creator is a fee wallet run by ▲, which claims and recycles its fees on a schedule. ▲ is an independent tool and isn't affiliated with pump.fun. Coins launched here are highly speculative and can lose all value. Launch only what you're prepared to lose, and follow the laws where you live.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
